@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+<h2>Jobs & Assigned Employees</h2>
+{% if jobs %}
+  <table border="1" cellpadding="5">
+    <tr>
+      <th>Job Title</th>
+      <th>Company</th>
+      <th>Location</th>
+      <th>Employees</th>
+    </tr>
+    {% for job in jobs %}
+    <tr>
+      <td>{{ job.title }}</td>
+      <td>{{ job.company }}</td>
+      <td>{{ job.location }}</td>
+      <td>
+        {% if job.employees %}
+          <ul>
+          {% for emp in job.employees %}
+            <li>{{ emp.name }} ({{ emp.email }})</li>
+          {% endfor %}
+          </ul>
+        {% else %}
+          <em>No employees assigned</em>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p>No jobs found.</p>
+{% endif %}
+
+<h2>Employees (Direct Match)</h2>
+{% if employees %}
+  <table border="1" cellpadding="5">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Job</th>
+    </tr>
+    {% for emp in employees %}
+    <tr>
+      <td>{{ emp.name }}</td>
+      <td>{{ emp.email }}</td>
+      <td>{{ emp.job.title if emp.job else 'No job' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p>No employees found.</p>
+{% endif %}
+{% endblock %}

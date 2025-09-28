@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Employees{% endblock %}
+
+{% block content %}
+<h1>Employees</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Job</th>
+        <th>Actions</th>
+    </tr>
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.job.title }} - {{ emp.job.company }}</td>
+        <td>
+            <form action="{{ url_for('update_employee', id=emp.id) }}" method="GET" style="display:inline;">
+                <button type="submit" class="btn-success">Update</button>
+            </form>
+            <form action="{{ url_for('delete_employee', id=emp.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

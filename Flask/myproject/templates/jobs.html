@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Jobs</h1>
+    <p class="text-center">Welcome to my Jobs</p>
+    <table class="table table-bordered">
+        <thead class="bg-success text-white">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for job in jobs %}
+            <tr>
+                <td>{{ job.id }}</td>
+                <td>{{ job.title }}</td>
+                <td>{{ job.company }}</td>
+                <td>{{ job.location }}</td>
+                <td>
+                    
+                   <form action="{{ url_for('update_job_html', id=job.id) }}" method="GET" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                    </form>
+
+                    <form action="{{ url_for('delete_job_html', id=job.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <style>
+        
+    </style>
+</div>
+{% endblock %}

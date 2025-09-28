@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div style="display:flex; gap:20px; flex-wrap: wrap;">
+
+  <!-- Left half: Cards + Search -->
+  <div style="flex:1; min-width:300px;">
+    <!-- Cards -->
+    <div style="display:flex; gap:20px; justify-content:center; margin-bottom:20px; flex-wrap: wrap;">
+      <div style="background:white; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,.2);">
+        <h2>{{ jobs_count }}</h2>
+        <p>Total Jobs</p>
+      </div>
+      <div style="background:white; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,.2);">
+        <h2>{{ employees_count }}</h2>
+        <p>Total Employees</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+          <h2>Jobs</h2>
+          <p>View, create, update and delete job postings.</p>
+          <a href="{{ url_for('jobs') }}" class="btn btn-success">View Jobs</a>
+          <a href="{{ url_for('create') }}" class="btn btn-success">Add Job</a>
+      </div>
+
+      <div class="card">
+          <h2>Employees</h2>
+          <p>Add employees and assign them to jobs.</p>
+          <a href="{{ url_for('list_employees') }}" class="btn btn-success">View Employees</a>
+          <a href="{{ url_for('create_employee') }}" class="btn btn-success">Add Employee</a>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <br><br>
+    <form action="{{ url_for('search') }}" method="get" class="search-form">
+      <input type="text" name="q" placeholder="Search jobs or employees..." required>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- Right half: Chart -->
+  <div style="flex:1; min-width:300px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <h3>Employees per Job</h3>
+    <div style="width:80%; height:400px;">
+      <canvas id="empChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('empChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: {{ chart_labels|tojson }},
+      datasets: [{
+        data: {{ chart_data|tojson }},
+        backgroundColor: ['#4CAF50','#2196F3','#FFC107','#FF5722','#9C27B0','#00BCD4']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+</script>
+{% endblock %}
+
