@@ -9,7 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# Job Model
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -30,7 +29,6 @@ def home():
     employees = Employee.query.all()
     jobs_count = len(jobs)
     employees_count = len(employees)
-    # for chart: employees per job
     labels = [j.title for j in jobs]
     data = [len([e for e in employees if e.job_id == j.id]) for j in jobs]
 
@@ -56,7 +54,6 @@ def search():
         )
     ).all()
 
-    # كل employees في كل job هييجي من العلاقة job.employees
     employees = Employee.query.filter(
         or_(
             Employee.name.ilike(f'%{query}%'),
@@ -120,10 +117,9 @@ def delete_job_html(id):
     db.session.commit()
     return redirect(url_for('jobs'))
 
-# 🟢 إضافة موظف جديد
 @app.route('/employees/create', methods=['GET', 'POST'])
 def create_employee():
-    jobs = Job.query.all()  # لإظهار الوظائف في الـ dropdown
+    jobs = Job.query.all()  
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -145,7 +141,7 @@ def list_employees():
 @app.route('/employees/update/<int:id>', methods=['GET', 'POST'])
 def update_employee(id):
     employee = Employee.query.get_or_404(id)
-    jobs = Job.query.all()  # علشان الdropdown
+    jobs = Job.query.all()  
     if request.method == 'POST':
         employee.name = request.form['name']
         employee.email = request.form['email']
@@ -163,3 +159,4 @@ def delete_employee(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
